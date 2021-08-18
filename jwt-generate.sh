@@ -44,12 +44,15 @@ sig=$(printf %s "$signed_content" | rs256_sign "$app_private_key" | b64enc)
 
 echo "::set-output name=token::${signed_content}.${sig}"
 
-check_id=$(curl -s -H "Authorization: Bearer ${signed_content}.${sig}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/app | jq '.id')
+check_curl=$(curl -s -H "Authorization: Bearer ${signed_content}.${sig}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/app)
+check_id=$(echo "$check_curl" | jq '.id')
 
 if [[ "$check_id" == "$app_id" ]]; then
     echo "::debug::JWT Token successfully generated."
 else
     echo "::error::Could not generate access token, expected $app_id got $check_id"
     echo "::error::JWT ${signed_content}.${sig}"
+    echo "::debug::Curl $check_curl"
+    echp "::error::Curl $check_curl"
     exit 1
 fi
