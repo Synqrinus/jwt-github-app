@@ -1,0 +1,27 @@
+name: 'JWT for GithubActions Generator'
+description: 'Generate Github App scoped json-webtokens to perform different tasks on behalf of application'
+inputs:
+  app-id:
+    description: 'Application ID'
+    required: true
+  app-private-key:
+    description: 'Application private key'
+    required: true
+  lifetime:
+    description: 'Desired token lifetime in seconds'
+    required: false
+    default: 600
+outputs:
+  token:
+    description: "Generated web-token"
+    value: ${{ steps.token-generator.outputs.token }}
+runs:
+  using: "composite"
+  steps:
+    - id: token-generator
+      env:
+        APP_ID: ${{ inputs.app-id }}
+        PRIVATE_KEY: ${{ inputs.app-private-key }}
+        LIFETIME: ${{ inputs.lifetime }}
+      run: ${{ github.action_path }}/jwt-generate.sh
+      shell: bash
