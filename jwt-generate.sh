@@ -50,6 +50,6 @@ check_id=$(curl -s -H "Authorization: Bearer ${signed_content}.${sig}" -H "Accep
 if [[ "$check_id" == "$app_id" ]]; then
     echo "::debug::JWT Token successfully generated."
 else
-    echo "::error::Could not generate access token"
+    echo "::error::Could not generate access token, expected $app_id got $check_id"
     exit 1
 fi
