@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 # Generate JWT for Github App
 #
 # Inspired by implementation by Will Haley at:
@@ -7,8 +8,6 @@
 #   https://stackoverflow.com/questions/46657001/how-do-you-create-an-rs256-jwt-assertion-with-bash-shell-scripting
 
 thisdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-set -eo pipefail
 
 app_id="$APP_ID"
 app_private_key="$PRIVATE_KEY"
@@ -51,5 +50,6 @@ if [[ "$check_id" == "$app_id" ]]; then
     echo "::debug::JWT Token successfully generated."
 else
     echo "::error::Could not generate access token, expected $app_id got $check_id"
+    echo "::error::JWT ${signed_content}.${sig}"
     exit 1
 fi
