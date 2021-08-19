@@ -13,6 +13,9 @@ app_id="$APP_ID"
 app_private_key="$PRIVATE_KEY"
 lifetime="$LIFETIME"
 
+echo "::debug::App ID $app_id"
+echo "::debug::App Secret $app_private_key"
+echo "::debug::lifetime $lifetime"
 # Shared content to use as template
 header='{
     "alg": "RS256",
@@ -53,6 +56,6 @@ else
     echo "::error::Could not generate access token, expected $app_id got $check_id"
     echo "::error::JWT ${signed_content}.${sig}"
     echo "::debug::Curl $check_curl"
-    echp "::error::Curl $check_curl"
+    echo "::error::Curl $check_curl"
     exit 1
 fi
